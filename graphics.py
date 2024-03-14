@@ -47,3 +47,15 @@ wifi_upload_symbol_8x16 = bytearray([
 ])
 wifi_upload_symbol_8x16_fb = framebuf.FrameBuffer(wifi_upload_symbol_8x16, 16, 8, framebuf.MONO_HLSB)
 
+option_picker_8x8 = bytearray([
+    0b00011000,
+    0b00111100,
+    0b01111100,
+    0b11111100,
+    0b11111100,
+    0b01111100,
+    0b00111100,
+    0b00011000,
+    
+])
+option_picker_8x8_fb = framebuf.FrameBuffer(option_picker_8x8, 8, 8, framebuf.MONO_HLSB)

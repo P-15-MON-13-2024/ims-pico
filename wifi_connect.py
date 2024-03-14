@@ -6,7 +6,6 @@ import machine
 import urequests
 import json
 import utime
-from graphics import wifi_connected_symbol_8x16_fb
 
 class WifiHandler:
     ssid=""

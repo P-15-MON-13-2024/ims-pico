@@ -20,7 +20,7 @@ class OledHandler:
         "download":wifi_download_symbol_8x16_fb
         }
     
-    def __init__(self,i2c_id=1,i2c_scl=Pin(15),i2c_sda=Pin(14),i2c_freq=200000,width=128,height=64):
+    def __init__(self,i2c_id=0,i2c_scl=Pin(21),i2c_sda=Pin(20),i2c_freq=200000,width=128,height=64):
         self.i2c = I2C(i2c_id, scl=i2c_scl, sda=i2c_sda, freq=i2c_freq)
         self._WIDTH = width
         self._HEIGHT = height
@@ -63,7 +63,10 @@ class OledHandler:
             y=12+9*line
             self.oled.fill_rect(0,y,self._WIDTH, 9,0)
         self.show()
-
+    def graphic(self, fb, x, y):
+        self.oled.blit(fb, x, y)
+        self.show()
+        
     def show(self):
         self.oled.show()
     
