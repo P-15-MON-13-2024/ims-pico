@@ -59,3 +59,76 @@ option_picker_8x8 = bytearray([
     
 ])
 option_picker_8x8_fb = framebuf.FrameBuffer(option_picker_8x8, 8, 8, framebuf.MONO_HLSB)
+
+battery_0_8x16 = bytearray([
+    0b00111111, 0b11111111,
+    0b00100000, 0b00000001,
+    0b00100000, 0b00000001,
+    0b11100000, 0b00000001,
+    0b11100000, 0b00000001,
+    0b00100000, 0b00000001,
+    0b00100000, 0b00000001,
+    0b00111111, 0b11111111,
+])
+battery_0_8x16_fb = framebuf.FrameBuffer(battery_0_8x16, 16, 8, framebuf.MONO_HLSB)
+
+battery_1_8x16 = bytearray([
+    0b00111111, 0b11111111,
+    0b00100000, 0b00000001,
+    0b00100000, 0b00001101,
+    0b11100000, 0b00001101,
+    0b11100000, 0b00001101,
+    0b00100000, 0b00001101,
+    0b00100000, 0b00000001,
+    0b00111111, 0b11111111,
+])
+battery_1_8x16_fb = framebuf.FrameBuffer(battery_1_8x16, 16, 8, framebuf.MONO_HLSB)
+
+battery_2_8x16 = bytearray([
+    0b00111111, 0b11111111,
+    0b00100000, 0b00000001,
+    0b00100000, 0b00111101,
+    0b11100000, 0b00111101,
+    0b11100000, 0b00111101,
+    0b00100000, 0b00111101,
+    0b00100000, 0b00000001,
+    0b00111111, 0b11111111,
+])
+battery_2_8x16_fb = framebuf.FrameBuffer(battery_2_8x16, 16, 8, framebuf.MONO_HLSB)
+
+battery_3_8x16 = bytearray([
+    0b00111111, 0b11111111,
+    0b00100000, 0b00000001,
+    0b00100000, 0b11111101,
+    0b11100000, 0b11111101,
+    0b11100000, 0b11111101,
+    0b00100000, 0b11111101,
+    0b00100000, 0b00000001,
+    0b00111111, 0b11111111,
+])
+battery_3_8x16_fb = framebuf.FrameBuffer(battery_3_8x16, 16, 8, framebuf.MONO_HLSB)
+
+battery_4_8x16 = bytearray([
+    0b00111111, 0b11111111,
+    0b00100000, 0b00000001,
+    0b00100011, 0b11111101,
+    0b11100011, 0b11111101,
+    0b11100011, 0b11111101,
+    0b00100011, 0b11111101,
+    0b00100000, 0b00000001,
+    0b00111111, 0b11111111,
+])
+battery_4_8x16_fb = framebuf.FrameBuffer(battery_4_8x16, 16, 8, framebuf.MONO_HLSB)
+
+battery_5_8x16 = bytearray([
+    0b00111111, 0b11111111,
+    0b00100000, 0b00000001,
+    0b00101111, 0b11111101,
+    0b11101111, 0b11111101,
+    0b11101111, 0b11111101,
+    0b00101111, 0b11111101,
+    0b00100000, 0b00000001,
+    0b00111111, 0b11111111,
+])
+battery_5_8x16_fb = framebuf.FrameBuffer(battery_5_8x16, 16, 8, framebuf.MONO_HLSB)
+

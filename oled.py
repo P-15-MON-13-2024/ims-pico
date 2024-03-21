@@ -12,12 +12,20 @@ class OledHandler:
     oled = None
     _status_bar_text = "Home"
     _wifi_status = "lost"
-    
+    _battery_level = 5
     _wifi_icon_map={
         "lost":wifi_lost_symbol_8x16_fb,
         "connected":wifi_connected_symbol_8x16_fb,
         "upload":wifi_upload_symbol_8x16_fb,
         "download":wifi_download_symbol_8x16_fb
+        }
+    _battery_level_map={
+        0:battery_0_8x16_fb,
+        1:battery_1_8x16_fb,
+        2:battery_2_8x16_fb,
+        3:battery_3_8x16_fb,
+        4:battery_4_8x16_fb,
+        5:battery_5_8x16_fb,        
         }
     
     def __init__(self,i2c_id=0,i2c_scl=Pin(21),i2c_sda=Pin(20),i2c_freq=200000,width=128,height=64):
@@ -36,13 +44,15 @@ class OledHandler:
         self.oled.fill(0)
         self.set_status_bar(text=status_bar_text)
     
-    def set_status_bar(self, text=None, wifi_status=None):
+    def set_status_bar(self, text=None, wifi_status=None, battery_level=None):
         self.oled.fill_rect(0,0,self._WIDTH,9,0) # fill_rect(x,y,del_x,del_y,0)
         self._status_bar_text =  text or self._status_bar_text
         self._wifi_status = wifi_status or self._wifi_status
         self.oled.text(self._status_bar_text,0,0)
         self.oled.line(0,10,self._WIDTH-1,10,1)
         self.oled.blit(self._wifi_icon_map[self._wifi_status],self._WIDTH-16, 0)
+        self._battery_level = battery_level or self._battery_level if battery_level!=0 else 0
+        self.oled.blit(self._battery_level_map[self._battery_level],self._WIDTH-40,0)
         self.show()
 
     def print(self, text, x, y):
@@ -74,18 +84,7 @@ if __name__ == "__main__":
     oled = OledHandler()
     oled.init_screen(status_bar_text="Home")
     utime.sleep(2)
-    oled.set_status_bar(wifi_status="connected")
-    utime.sleep(0.1) 
-    oled.print("billo",0)
-    utime.sleep(0.2)
-    oled.print("bagghe",1)
-    utime.sleep(0.2)
-    oled.print("billeyan",2)
-    utime.sleep(0.2)
-    oled.print("da",3)
-    utime.sleep(0.1)
-    oled.print("ki",4)
-    utime.sleep(0.1)
-    oled.print("karen",5)
-    utime.sleep(0.2)
-    oled.print("karengi",5)
+    arr = [5,4,3,2,1,0]
+    for i in arr:
+        oled.set_status_bar(battery_level=i)
+        utime.sleep(2)

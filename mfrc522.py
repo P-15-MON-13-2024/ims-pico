@@ -378,3 +378,14 @@ class MFRC522:
             print("Authentication error")
             return self.ERR
         return self.OK
+    
+if __name__=="__main__":
+    reader = MFRC522(spi_id=0,sck=6,miso=4,mosi=7,cs=5,rst=2)
+    while True:
+        (stat, tag_type) = reader.request(reader.REQIDL)
+        if stat == reader.OK:
+            (stat, uid) = reader.SelectTagSN()
+            if stat == reader.OK:
+                card = int.from_bytes(bytes(uid),"little",False)
+                serial_id = str(bytes(uid).hex()).upper()
+                print(serial_id)

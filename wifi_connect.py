@@ -31,8 +31,9 @@ class WifiHandler:
         
 if __name__ == '__main__':
     try:
-        wifiHandler = WifiHandler('keymii-way','wonderwall')
+        wifiHandler = WifiHandler('abhi-v','kradh123')
         wifiHandler.connect()
+        print('Hi')
         req = urequests.get("http://192.168.1.104:8000/api/hello/")
         print(json.loads(req.text))
     except KeyboardInterrupt:
