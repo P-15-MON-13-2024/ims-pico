@@ -8,7 +8,7 @@ from ssd1306 import SSD1306_I2C
 from machine import Pin, I2C
 from oled import OledHandler
 from graphics import option_picker_8x8_fb
-from battery import readBattery
+from battery import BatteryMonitor
 import gc
 
 wifi_configs={
@@ -17,9 +17,9 @@ wifi_configs={
     "abhi-v":["kradh123","http://192.168.106.235:8000"],
     "Anime":["522n2J*1",""],
     "Animesh":["Ani@1234",""],
-    "Shounak":["hotspot@1234","http://192.168.229.235:8000"]
+    "Shounak":["hotspot@1234","http://192.168.5.235:8000"]
     }
-wifiSSID = "Shounak"
+wifiSSID = "keymii-way"
 serverUrl = wifi_configs[wifiSSID][1]
 
 wifiPSWD = wifi_configs[wifiSSID][0] 
@@ -31,28 +31,8 @@ reader = MFRC522(spi_id=0,sck=6,miso=4,mosi=7,cs=5,rst=2)
 buttonA = Pin(18, Pin.IN, Pin.PULL_DOWN)
 buttonB = Pin(16, Pin.IN, Pin.PULL_DOWN)
 
+battery = BatteryMonitor(26)
 
-last_battery_read_time= 0;
-
-def updateBatteryLevel():
-    global last_battery_read_time
-    if utime.time()-last_battery_read_time>10:
-        volt = readBattery()
-        level = 5
-        if volt >= 3.3:
-            level = 5
-        elif volt >=2.9:
-            level = 4
-        elif volt >=2.5:
-            level = 3
-        elif volt >=2.1:
-            level = 2
-        elif volt >= 1.8:
-            level = 1
-        else:
-            level = 0
-        oled.set_status_bar(battery_level = level)
-        last_battery_read_time=utime.time()
 
 def get_access_token():
     unique_id = machine.unique_id()
@@ -66,27 +46,6 @@ def get_access_token():
         return access_token
     except:
         return None
-        
-def start_sapien_scan(reader, oled):
-    while True:
-        updateBatteryLevel()
-        utime.sleep(0.001)
-        reader.init()
-        (stat, tag_type) = reader.request(reader.REQIDL)
-        if stat == reader.OK:
-            (stat, uid) = reader.SelectTagSN()
-            if stat == reader.OK:
-                card = int.from_bytes(bytes(uid),"little",False)
-                serial_id = str(bytes(uid).hex()).upper()                
-                try:
-                    onboard_led.on()
-                    res = urequests.get(f"{serverUrl}/api/rfid/get-sapien/?serial={serial_id}", headers=auth_header)
-                    data = parse_sapien(res,oled)
-                except KeyboardInterrupt:
-                    machine.reset()
-                except Exception as e:
-                    print(e)
-            onboard_led.off()
             
 def get_sapien(serial_id):
     onboard_led.on()
@@ -158,7 +117,7 @@ def home_menu():
     oled.print("Return",3)
     s = -1
     while True:
-        updateBatteryLevel()
+        battery.updateBatteryLevel(oled)
         line = 30+9*s
         oled.graphic(option_picker_8x8_fb, 70, line)
         if buttonB.value() == 1:
@@ -190,7 +149,7 @@ def run_issue_mode(sapien_serial_id):
     if inventory_item["exists"] and inventory_item["is_available"]:
         oled.print("Press (A) for ok",4)
         while True:
-            updateBatteryLevel()
+            battery.updateBatteryLevel(oled)
             if buttonA.value() == 1:
                 issue_success = handle_issue_process(sapien_serial_id, item_serial_id)
                 if issue_success:
@@ -225,7 +184,7 @@ def run_return_mode(sapien_serial_id):
     if inventory_item["exists"] and not inventory_item["is_available"]:
         oled.print("Press (A) for ok",4)
         while True:
-            updateBatteryLevel()
+            battery.updateBatteryLevel(oled)
             if buttonA.value() == 1:
                 return_success = handle_return_process(sapien_serial_id, item_serial_id)
                 if return_success:
@@ -267,7 +226,7 @@ def main():
     HEIGHT=64
 
     oled.init_screen()
-    updateBatteryLevel()
+    battery.updateBatteryLevel(oled)
     wifiHandler = WifiHandler(ssid = wifiSSID, password = wifiPSWD)
     oled.set_status_bar(text="Connecting", wifi_status="lost")
     oled.print("Connecting to")
@@ -287,11 +246,11 @@ def main():
     reader.init()
     while True:
         gc.collect()
-        updateBatteryLevel()
+        battery.updateBatteryLevel(oled)
         utime.sleep(0.001)
         menu_select = home_menu()
         while True:
-            updateBatteryLevel()
+            battery.updateBatteryLevel(oled)
             oled.set_status_bar(text=menu_select)
             utime.sleep(0.001)
             oled.print("Scan ID...")
